@@ -240,7 +240,7 @@ closeOtp.onclick = () => {
 
 async function fetchCSRF() {
   try {
-    await fetch('http://127.0.0.1:8000/api/csrf/', {
+    await fetch('https://harubayanadminportal.onrender.com/api/csrf/', {
       credentials: 'include',
     });
   } catch (err) {
@@ -261,7 +261,7 @@ loginBtn.addEventListener('click', async () => {
     await fetchCSRF();
     const csrftoken = getCookie('csrftoken');
 
-    const res = await fetch('http://127.0.0.1:8000/api/login/', {
+    const res = await fetch('https://harubayanadminportal.onrender.com/api/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -300,7 +300,7 @@ verifyOtpBtn.addEventListener('click', async () => {
   try {
     const csrftoken = getCookie('csrftoken');
 
-    const res = await fetch('http://127.0.0.1:8000/api/verify-otp/', {
+    const res = await fetch('https://harubayanadminportal.onrender.com/api/verify-otp/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
