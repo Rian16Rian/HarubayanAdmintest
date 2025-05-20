@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Haru Bayan's Menu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin: 20px;
+      padding: 10px 15px;
+      background-color: #8b0013;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+
+    .back-button:hover {
+      background-color: #a40017;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-top: 60px;
+      text-shadow: 2px 2px 4px #999;
+    }
+
+    h2 {
+      margin-bottom: 40px;
+      color: #555;
+    }
+
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .category {
+      background-color: gray;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+
+    .category:hover {
+      background-color: #8b0013;
+      color: #fff;
+    }
+
+    /* Sakura falling animation */
+    .sakura {
+      position: absolute;
+      top: -50px;
+      width: 30px;
+      height: 30px;
+      background-image: url('../imgs/sakura.png');
+      background-size: cover;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateX(0) rotate(0);
+        top: -50px;
+      }
+      100% {
+        transform: translateX(200px) rotate(360deg);
+        top: 100vh;
+      }
+    }
+
+    .sakura:nth-child(odd) {
+      animation-duration: 8s;
+      animation-delay: 2s;
+    }
+
+    .sakura:nth-child(even) {
+      animation-duration: 6s;
+      animation-delay: 4s;
+    }
+  </style>
+</head>
+<body>
+  <a class="back-button" href="menu.html">← Back to Menu Management</a>
+
+  <h1>HARU BAYAN'S MENU</h1>
+  <h2>Pick your favorite category</h2>
+
+  <div class="categories">
+    <a class="category" href="main-dish.html">
+      <strong>Main Dish</strong><br>View all recipes
+    </a>
+    <a class="category" href="Noodles.html">
+      <strong>Noodles</strong><br>View all recipes
+    </a>
+    <a class="category" href="RiceDishes.html">
+      <strong>Rice Dishes</strong><br>View all recipes
+    </a>
+    <a class="category" href="Soups&Stews.html">
+      <strong>Soups & Stews</strong><br>View all recipes
+    </a>
+    <a class="category" href="SideDishes.html">
+      <strong>Side Dishes</strong><br>View all recipes
+    </a>
+    <a class="category" href="Appetizers.html">
+      <strong>Appetizers</strong><br>View all recipes
+    </a>
+    <a class="category" href="StreetFood.html">
+      <strong>Street Food & Snacks</strong><br>View all recipes
+    </a>
+    <a class="category" href="Desserts&Sweets.html">
+      <strong>Desserts & Sweets</strong><br>View all recipes
+    </a>
+    <a class="category" href="Beverages.html">
+      <strong>Beverages</strong><br>View all recipes
+    </a>
+  </div>
+
+  <script>
+     document.addEventListener("DOMContentLoaded", function () {
+      for (let i = 0; i < 20; i++) {
+        const sakura = document.createElement("div");
+        sakura.className = "sakura";
+        sakura.style.left = Math.random() * 100 + "vw";
+        sakura.style.animationDelay = Math.random() * 5 + "s";
+        document.body.appendChild(sakura);
+      }
+    })
+
+    generateSakura();
+  </script>
+</body>
+</html>

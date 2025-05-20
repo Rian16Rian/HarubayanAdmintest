@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Harubayan - Admin Login</title>
+  <link rel="icon" href="../imgs/logo-harubayan.png" />
+
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif;
+    }
+    body {
+      background-color: #8b0013;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .login-box h2 {
+      color: white;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .login-card {
+    background-color: #f3e6f3;
+    padding: 30px 20px;
+    border-radius: 15px;
+    width: 430px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .login-card input {
+    width: 300px;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #570404;
+    border-radius: 10px;
+    background-color: #f1cece;
+  }
+  
+  .logo {
+    width: 80px;
+    margin: 20px 0 10px;
+  }
+  
+  .brand {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .login-card button {
+    background-color: #ff7070;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 200px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  
+  .login-card button:hover {
+    background-color: #e05555;
+  }
+    .notification {
+      display: none;
+      color: white;
+      padding: 15px;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .notification.success { background-color: #28a745; }
+    .notification.error { background-color: #dc3545; }
+    .notification.show { display: block; opacity: 1; }
+
+   .modal {
+  position: fixed;
+  z-index: 1001;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 30px 25px;
+  height: 35%;
+  border-radius: 12px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.modal-content h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #8b0013;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 10px 0;
+  background-color: #f9f9f9;
+}
+
+.modal-content button {
+  background-color: #8b0013;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  font-weight: bold;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #a1001a;
+}
+
+.close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 24px;
+  color: #555;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #000;
+}
+
+#otp-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+  min-height: 20px;
+}
+
+    .close {
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    #otp-message {
+      color: red;
+      margin-top: 10px;
+      min-height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>ADMIN PORTAL LOGIN</h2>
+    <div class="login-card">
+      <img src="../imgs/logo-harubayan.png" alt="Logo" class="logo" style="width: 80px; margin-bottom: 10px;" />
+      <h3 class="brand">Harubayan</h3>
+      <input type="text" placeholder="Username" id="username" autocomplete="username" />
+      <input type="password" placeholder="Password" id="password" autocomplete="current-password" />
+      <button id="login-btn">LOGIN</button>
+    </div>
+  </div>
+
+  <!-- OTP Modal -->
+  <div id="otp-modal" class="modal">
+    <div class="modal-content">
+      <span id="close-otp" class="close">&times;</span>
+      <h3>Enter OTP Code</h3>
+      <input type="text" id="otp-input" placeholder="6-digit OTP" maxlength="6" />
+      <button id="verify-otp-btn">Verify OTP</button>
+      <p id="otp-message"></p>
+    </div>
+  </div>
+
+  <div id="login-notification" class="notification"></div>
+
+  <script>
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+const loginBtn = document.getElementById('login-btn');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const otpModal = document.getElementById('otp-modal');
+const closeOtp = document.getElementById('close-otp');
+const verifyOtpBtn = document.getElementById('verify-otp-btn');
+const otpInput = document.getElementById('otp-input');
+const otpMessage = document.getElementById('otp-message');
+const notification = document.getElementById('login-notification');
+
+let currentUsername = '';
+let currentPassword = '';
+
+function displayNotification(message, type = 'success') {
+  notification.textContent = message;
+  notification.className = 'notification ' + type + ' show';
+  setTimeout(() => {
+    notification.classList.remove('show');
+  }, 4000);
+}
+
+closeOtp.onclick = () => {
+  otpModal.style.display = 'none';
+  otpInput.value = '';
+  otpMessage.textContent = '';
+};
+
+async function fetchCSRF() {
+  try {
+    await fetch('http://127.0.0.1:8000/api/csrf/', {
+      credentials: 'include',
+    });
+  } catch (err) {
+    console.error('CSRF fetch failed:', err);
+  }
+}
+
+loginBtn.addEventListener('click', async () => {
+  const username = usernameInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  if (!username || !password) {
+    displayNotification('Please fill in both fields!', 'error');
+    return;
+  }
+
+  try {
+    await fetchCSRF();
+    const csrftoken = getCookie('csrftoken');
+
+    const res = await fetch('http://127.0.0.1:8000/api/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken,
+      },
+      credentials: 'include',
+      body: JSON.stringify({ username, password }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      displayNotification(data.detail || data.error || 'Login failed!', 'error');
+      return;
+    }
+
+    currentUsername = username;
+    currentPassword = password;
+
+    displayNotification('OTP sent to your email. Please check.', 'success');
+    otpModal.style.display = 'flex';
+  } catch (err) {
+    displayNotification('Server error. Try again later.', 'error');
+    console.error(err);
+  }
+});
+
+verifyOtpBtn.addEventListener('click', async () => {
+  const otp = otpInput.value.trim();
+
+  if (otp.length !== 6 || isNaN(otp)) {
+    otpMessage.textContent = 'Please enter a valid 6-digit OTP.';
+    return;
+  }
+
+  try {
+    const csrftoken = getCookie('csrftoken');
+
+    const res = await fetch('http://127.0.0.1:8000/api/verify-otp/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken,
+      },
+      credentials: 'include',
+      body: JSON.stringify({ otp_code: otp }),
+    });
+
+    const text = await res.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      displayNotification('Invalid server response.', 'error');
+      console.error('Parsing error:', e);
+      return;
+    }
+
+    if (!res.ok) {
+      displayNotification(data.detail || data.error || 'OTP verification failed!', 'error');
+      return;
+    }
+
+    displayNotification('Login successful! Redirecting...', 'success');
+
+    setTimeout(() => {
+  if (data.role === 'recipe') {
+    window.location.href = '../recipe-section/AdminRecipeChoice.html';
+  } else if (data.role === 'menu') {
+    window.location.href = '../MenuManagement/menu.html';
+  } else if (data.role === 'order') {
+    window.location.href = '../order-section/orders.html';
+    } else if (data.role === 'superadmin') {
+    window.location.href = '../authentication/adminLOGIN.html';
+  } else {
+    displayNotification('Unknown role.', 'error');
+  }
+}, 1500);
+
+  } catch (err) {
+    otpMessage.textContent = 'Server error during OTP verification.';
+    console.error(err);
+  }
+});
+
+
+window.onclick = function(event) {
+  if (event.target === otpModal) {
+    otpModal.style.display = 'none';
+    otpInput.value = '';
+    otpMessage.textContent = '';
+  }
+};
+
+
+</script>
+</body>
+</html>

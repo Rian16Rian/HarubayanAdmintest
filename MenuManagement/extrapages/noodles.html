@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Noodles Menu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff9f3;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      color: #8b0013;
+    }
+
+    .menu-list {
+      max-width: 1000px;
+      margin: 30px auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* 4 items per row */
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .menu-list {
+        grid-template-columns: repeat(2, 1fr); /* adjust for smaller screens */
+      }
+    }
+
+    @media (max-width: 500px) {
+      .menu-list {
+        grid-template-columns: 1fr; /* full width on very small screens */
+      }
+    }
+
+    .menu-item {
+      background-color: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      position: relative;
+      text-align: center;
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between; /* This allows space between the content and the button */
+      align-items: center;
+    }
+
+    .menu-item h3 {
+      margin: 0;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .menu-item p {
+      margin: 5px 0;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .price {
+      font-weight: bold;
+      color: #8b0013;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 15px;
+      background-color: #8b0013;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .back-button:hover {
+      background-color: #a40017;
+    }
+
+    .delete-button {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      padding: 5px 8px;
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .delete-button:hover {
+      background-color: #c82333;
+    }
+
+    /* Sakura falling animation */
+    .sakura {
+      position: absolute;
+      top: -50px;
+      width: 30px;
+      height: 30px;
+      background-image: url('../imgs/sakura.png'); /* Update path to your sakura image */
+      background-size: cover;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateX(0) rotate(0);
+        top: -50px;
+      }
+      100% {
+        transform: translateX(200px) rotate(360deg);
+        top: 100vh;
+      }
+    }
+
+    .sakura:nth-child(odd) {
+      animation-duration: 8s;
+      animation-delay: 2s;
+    }
+
+    .sakura:nth-child(even) {
+      animation-duration: 6s;
+      animation-delay: 4s;
+    }
+  </style>
+</head>
+<body>
+  <a class="back-button" href="nextPage.html">← Back to Menu Management</a>
+  <h1>Noodles</h1>
+  <div class="menu-list" id="menuList"></div>
+
+  <script>
+    function renderMenu() {
+      const menuListDiv = document.getElementById("menuList");
+      menuListDiv.innerHTML = "";
+
+      const menuItems = JSON.parse(localStorage.getItem("menuItems")) || [];
+      const noodles = menuItems.filter(item => item.category === "Noodles");
+
+      if (noodles.length === 0) {
+        menuListDiv.innerHTML = "<p>No noodle dishes available.</p>";
+      } else {
+        noodles.forEach((item) => {
+          const itemDiv = document.createElement("div");
+          itemDiv.className = "menu-item";
+          itemDiv.innerHTML = `
+            <h3>${item.name}</h3>
+            <p>${item.description}</p>
+            <p class="price">₱${item.price}</p>
+            <button class="delete-button">Delete</button>
+          `;
+
+          itemDiv.querySelector(".delete-button").addEventListener("click", () => {
+            deleteMenuItem(item);
+          });
+
+          menuListDiv.appendChild(itemDiv);
+        });
+      }
+    }
+
+    function deleteMenuItem(itemToDelete) {
+      let menuItems = JSON.parse(localStorage.getItem("menuItems")) || [];
+
+      menuItems = menuItems.filter(item => {
+        return !(item.name === itemToDelete.name &&
+                 item.description === itemToDelete.description &&
+                 item.price === itemToDelete.price &&
+                 item.category === itemToDelete.category);
+      });
+
+      localStorage.setItem("menuItems", JSON.stringify(menuItems));
+      renderMenu();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderMenu();
+      // Generate sakura falling animation
+      for (let i = 0; i < 20; i++) {
+        const sakura = document.createElement("div");
+        sakura.className = "sakura";
+        sakura.style.left = Math.random() * 100 + "vw";
+        sakura.style.animationDelay = Math.random() * 5 + "s";
+        document.body.appendChild(sakura);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recipe Categories</title>
+  <link rel="icon" type="image/png" href="../../imgs/logo-harubayan.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="logo-container">
+      <img src="../../imgs/logo-harubayan.png" alt="Logo" class="nav-logo">
+      <div>
+        <div class="nav-brand">Haru-Bayan</div>
+      </div>
+    </div>
+    
+    <div class="nav-center">Admin Portal</div>
+
+    <div class="nav-right">
+      <div class="user-menu">
+        <!-- User icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="user-icon">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14c3.866 0 7 2.686 7 6H5c0-3.314 3.134-6 7-6zm0-2c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+        </svg>
+
+        <div class="dropdown">
+          <a href="../../authentication/adminLOGIN.html" id="logout-btn">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <header class="slider-container">
+    
+    <div class="slider-images" id="sliderImages">
+      <img src="../../imgs/recipepage/slider-menu/sushi1.webp" class="slide active" alt="Sushi Slide 1">
+      <img src="../../imgs/recipepage/slider-menu/sushi2.jpg" class="slide" alt="Sushi Slide 2">
+      <img src="../../imgs/recipepage/slider-menu/sushi3.avif" class="slide" alt="Sushi Slide 3">
+      <img src="../../imgs/recipepage/slider-menu/sushi4.jpg" class="slide" alt="Sushi Slide 4">
+    </div>
+    <div class="slider-text">
+        <a href="../AdminRecipeChoice.html" class="back-btn">← Back to Recipe Dashboard</a>
+      <h1>HARU BAYAN'S RECIPES</h1>
+      <p>Pick your favorite category</p>
+    </div>
+    
+    <div class="indicators">
+      <span class="indicator" onclick="showSlide(0)"></span>
+      <span class="indicator" onclick="showSlide(1)"></span>
+      <span class="indicator" onclick="showSlide(2)"></span>
+      <span class="indicator" onclick="showSlide(4)"></span>
+    </div>
+    
+  </header>
+  
+  <main class="menu-grid">
+    <a href="../view-recipes/maindish/maindish.html" class="menu-item" style="background-image: url('../../imgs/recipepage/main.jpg');">
+      <div class="overlay">
+        <h2>Main Dish</h2>
+        <span>View all recipes</span>
+      </div>
+    </a>
+    <a href="..//view-recipes/noodles/noodles.html" class="menu-item" style="background-image: url('../../imgs/recipepage/noodle.avif');">
+      <div class="overlay">
+        <h2>Noodles</h2>
+        <span>View all recipes</span>
+      </div>
+    </a>
+    <a href="../view-recipes/ricedish/ricedish.html" class="menu-item" style="background-image: url('../../imgs/recipepage/rice.jpg');">
+      <div class="overlay">
+        <h2>Rice Dishes</h2>
+        <span>View all recipes</span>
+      </div>
+    </a>
+    <a href="../view-recipes/soups/ss.html" class="menu-item" style="background-image: url('../../imgs/recipepage/soup.jpg');">
+      <div class="overlay">
+        <h2>Soups & Stews</h2>
+        <span>View all recipes</span>
+      </div>
+    </a>
+    <a href="../view-recipes/sidedish/sidedish.html" class="menu-item" style="background-image: url('../../imgs/recipepage/sidedish.jpg');">
+      <div class="overlay">
+        <h2>Side Dishes</h2>
+        <span>View all recipes</span>
+      </div>
+    </a>
+    <a href="../view-recipes/appetizers/appetizers.html" class="menu-item" style="background-image: url('../../imgs/recipepage/appetizer.jpg');">
+      <div class="overlay">
+        <h2>Appetizers</h2>
+        <span>View all recipes</span>
+      </div>
+    </a>
+    <a href="../view-recipes/street/Street.html" class="menu-item" style="background-image: url('../../imgs/recipepage/street.jpg');">
+      <div class="overlay">
+        <h2>Street Food & Snacks</h2>
+        <span>View all recipes</span>
+      </div>
+    </a>
+    <a href="../view-recipes/desserts-sweets/ds.html" class="menu-item" style="background-image: url('../../imgs/recipepage/dessert.webp');">
+      <div class="overlay">
+        <h2>Desserts & Sweets</h2>
+        <span>View all recipes</span>
+      </div>
+    </a>
+    <a href="../view-recipes/beverages/beverages.html" class="menu-item" style="background-image: url('../../imgs/recipepage/beverage.jpg');">
+      <div class="overlay">
+        <h2>Beverages</h2>
+        <span>View all recipes</span>
+      </div>
+    </a>
+  </main>
+
+  <footer>
+    Copyright &copy; 2025 Haru Bayan. Created by MyTech Corp.
+  </footer>
+
+  
+
+  <style>
+    /* === RESET & BASE === */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+  
+    body {
+      background: #fff;
+      color: #333;
+    }
+  
+    /* NAVBAR */
+    .navbar {
+      background-color: #8b0013;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+
+    .navbar .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .nav-logo {
+      height: 32px;
+      border-radius: 100%;
+    }
+
+    .nav-brand {
+      font-size: 16px;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-weight: bold;
+      color: white;
+    }
+
+    .nav-center {
+      text-align: center;
+      font-size: 25px;
+      font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      font-weight: bold;
+      color: white;
+      flex: 2;
+      margin-left: -50%;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .user-menu {
+      position: relative;
+      display: inline-block;
+    }
+
+    .user-icon {
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      color: white;
+      padding: 5px;
+      border-radius: 50%;
+      transition: background-color 0.3s;
+      border: 1px solid #fff8f8;
+      border-radius: 100%;
+    }
+
+    .user-icon:hover {
+      background-color: #a8001a;
+      border: 1px solid #fff8f8;
+      border-radius: 100%;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: white;
+      color: #8b0013;
+      min-width: 150px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      margin-top: 10px;
+      z-index: 1;
+      border: 1px solid #8b0013;
+    }
+
+    .dropdown a {
+      display: block;
+      padding: 12px;
+      text-decoration: none;
+      color: #8b0013;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+
+    .dropdown a:hover {
+      background-color: #ffdada;
+    }
+  
+  
+    /* === SLIDER === */
+    .slider-container {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      overflow: hidden;
+    }
+  
+    .slider-images {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  
+    .slider-images img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+  
+    .slider-images img.active {
+      opacity: 1;
+      z-index: 1;
+    }
+  
+    .slider-text {
+      position: absolute;
+      z-index: 2;
+      text-align: center;
+      padding: 80px 10px;
+      color: white;
+      text-shadow: 2px 2px 5px black;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  
+    .slider-text h1 {
+      font-size: 50px;
+      margin-bottom: 10px;
+    }
+  
+    .slider-text p {
+      font-size: 25px;
+    }
+  
+    .slide {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
+
+    .back-btn {
+      display: inline-block;
+      padding: 8px 20px;
+      background-color: #8b0013;
+      color: white;
+      font-size: 14px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+      margin-left: -170%;
+    }
+
+    .back-btn:hover {
+      background-color: #d39379;
+    }
+
+  
+    /* === MENU GRID === */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+  
+    .menu-item {
+      background-size: cover;
+      background-position: center;
+      border-radius: 10px;
+      height: 150px;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+  
+    .menu-item:hover {
+      transform: scale(1.05);
+    }
+  
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.5);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+    }
+  
+    .overlay h2 {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+  
+    .overlay span {
+      font-size: 14px;
+    }
+  
+    
+    /* === FOOTER === */
+    footer {
+    background-color: #8b0013;
+    color: white;
+    text-align: center;
+    font-size: 13px;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+  </style>
+  
+
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll(".slide");
+  const indicators = document.querySelectorAll(".indicator");
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.remove("active");
+      indicators[i].classList.remove("active");
+      if (i === index) {
+        slide.classList.add("active");
+        indicators[i].classList.add("active");
+      }
+    });
+    currentSlide = index;
+  }
+
+  function autoSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }
+
+  setInterval(autoSlide, 4000); // Slide every 4 seconds
+
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recipe - Soups & Stews</title>
+  <link rel="icon" type="image/png" href="../../../imgs/logo-harubayan.png"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&display=swap" rel="stylesheet">
+  <style>
+   body, html {
+    height: 100%;  /* Make sure the body and html cover the full height of the viewport */
+    margin: 0;
+  }
+
+  body {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  /* Ensures footer stays at the bottom */
+  min-height: 100%; /* Ensures body takes full height */
+}
+
+    /* Styled Title */
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 3rem; /* Increase font size */
+      font-weight: bold; /* Make it bold */
+      color: #6d0000; /* White color */
+      background: linear-gradient(45deg, #8b0013, #d39379); /* Gradient effect */
+      -webkit-background-clip: text; /* Clip the background to text */
+      background-clip: text;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
+      letter-spacing: 2px; /* Increase space between letters */
+      margin-bottom: -2%;
+    }
+
+    /* Tagline */
+    .tagline {
+      text-align: center;
+      font-size: 1.5rem;
+      color: #333;
+      font-weight: 400;
+      margin-bottom: 30px;
+      font-style: italic;
+      margin-top: 3%;
+    }
+
+    .recipes {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-left: 10%;
+      margin-right: 10%;
+      margin-bottom: 5%;
+
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    .card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
+    }
+
+    .card h3 {
+      margin: 0.25rem 0;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      margin: 0.25rem 0;
+      color: #555;
+    }
+
+    .card small {
+      color: #888;
+    }
+
+    .view-btn {
+      display: inline-block;
+      padding: 8px 16px;
+      background-color: #8b0013;
+      color: white;
+      font-size: 14px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .view-btn:hover {
+      background-color: #d39379;
+    }
+
+    /* Back Button */
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background-color: #8b0013;
+      color: white;
+      font-size: 14px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background-color: #d39379;
+    }
+
+    footer {
+      background-color: #9b001e;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      margin-top: auto;  /* Push the footer to the bottom of the page */
+    }
+     
+/* FOR MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(5px);
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.4s ease;
+}
+
+#modal-title {
+  font-family: 'Sawarabi Mincho', serif;
+  font-size: 2.4rem;
+  color: #6d0000;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 18px;
+  background: linear-gradient(45deg, #8b0013, #9c6f6a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  letter-spacing: 2px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Close button */
+.close {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  font-size: 26px;
+  color: #444;
+  cursor: pointer;
+  transition: color 0.3s;
+  animation: fadeInImage 0.8s ease forwards;
+}
+.close:hover {
+  color: #e74c3c;
+}
+
+@keyframes fadeInImage {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+#modal-image {
+  width: 96%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  opacity: 0;
+  animation: fadeInImage 3.5s ease forwards;
+}
+
+#modal-description {
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 16px;
+  font-size: 16px;
+  line-height: 1.6;
+  white-space: pre-line;
+  transition: opacity 2.5s ease;
+  opacity: 0;
+  color: rgb(236, 232, 232);
+    text-shadow:
+   -1px -1px 2px rgba(0, 0, 0, 0.6),
+    1px -1px 2px rgba(0, 0, 0, 0.6),
+   -1px  1px 2px rgba(0, 0, 0, 0.6),
+    1px  1px 2px rgba(0, 0, 0, 0.6);
+
+  /* FOR background */
+  background: linear-gradient(
+      rgba(139, 0, 19, 0.8),
+      rgba(204, 118, 78, 0.7)
+    ),
+    url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  background-blend-mode: overlay;
+  background-size: cover;
+  border-radius: 12px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
+}
+
+#modal-description.visible {
+  opacity: 1;
+}
+
+/* Scrollbar styling for WebKit browsers */
+#modal-description::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 8px;
+  background: transparent;
+}
+
+#modal-description::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0;
+  border-radius: 8px;
+}
+
+#modal-description::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d38379, #8b0013);
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(139, 0, 19, 0.6);
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+/* Firefox version */
+#modal-description {
+  scrollbar-width: thin;
+  scrollbar-color: #8b0013 transparent;
+}
+
+  </style>
+</head>
+<body>
+  <a href="javascript:history.back()" class="back-btn"> ← Back </a>
+
+  <h1>SOUPS & STEWS</h1>
+  <p class="tagline">Explore a wide range of delicious and healthy recipes from our curated collection.</p>
+
+  <section class="recipes" id="recipe-list"></section>
+
+  <div id="recipe-modal" class="modal">
+
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <img id="modal-image" src="" alt="Recipe Image">
+      <h2 id="modal-title"></h2>
+      <div id="modal-description"></div>
+    </div>
+
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://lngdoqimxolarajflobo.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxuZ2RvcWlteG9sYXJhamZsb2JvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ0MjQ5MDQsImV4cCI6MjA2MDAwMDkwNH0.hDroH3E7cq-RHh8iGsbg5s1tdYVSHMI94ZSZXzoABic';
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const recipeList = document.getElementById('recipe-list');
+
+    async function loadRecipesByCategory(category) {
+      const { data, error } = await client
+        .from('recipes')
+        .select('*')
+        .eq('category', category)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error loading recipes:', error.message);
+        return;
+      }
+
+      recipeList.innerHTML = '';
+      data.forEach(recipe => {
+        const shortDescription = recipe.description.length > 100 
+          ? recipe.description.substring(0, 100) + '...' 
+          : recipe.description;
+
+        const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = `
+          <img src="${recipe.image_url || 'https://via.placeholder.com/300x200'}" alt="${recipe.name}">
+          <h3>${recipe.name}</h3>
+          <p>${shortDescription}</p>
+          <small>${recipe.category} | ${new Date(recipe.created_at).toLocaleString()}</small>
+          <button class="view-btn" data-id="${recipe.id}">View Recipe</button>
+        `;
+      recipeList.appendChild(div);
+    });
+    }
+
+    // Call the function for a specific category, e.g., 'Main Dish'
+    loadRecipesByCategory('Soups & Stews'); // You can dynamically change this based on user input
+
+  </script>
+  
+  <script>
+  const modal = document.getElementById('recipe-modal');
+  const modalImage = document.getElementById('modal-image');
+  const modalTitle = document.getElementById('modal-title');
+  const modalDesc = document.getElementById('modal-description');
+  const closeBtn = document.querySelector('.close');
+
+  document.addEventListener('click', async (e) => {
+  if (e.target.classList.contains('view-btn')) {
+    const id = e.target.dataset.id;
+    const { data, error } = await client
+      .from('recipes')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      console.error('Failed to fetch recipe:', error.message);
+      return;
+    }
+
+    modalImage.src = data.image_url || 'https://via.placeholder.com/600x300';
+    modalTitle.textContent = data.name;
+
+    modalImage.style.animation = 'none'; // resets animation
+    void modalImage.offsetHeight;         // reflow
+    modalImage.style.animation = 'fadeInImage 0.8s ease forwards'; // play animation
+
+    // Convert newlines to spacing
+    function formatDescription(text) {
+      if (!text) return 'No description provided.';
+      let lines = text.split('\n').map(line => line.trim());
+      let html = lines.join('<br>');
+      html = html.replace(/(<br>){3,}/g, '<br><br>');
+      return html;
+    }
+
+    modalDesc.innerHTML = formatDescription(data.description);
+
+    modalDesc.classList.remove('visible');
+    modal.classList.add('show');
+
+    setTimeout(() => {
+      modalDesc.scrollTop = 0;
+      modalDesc.classList.add('visible');
+    }, 100);
+  }
+
+});
+
+  function closeModal() {
+    modal.classList.remove('show');
+    modalDesc.classList.remove('visible');
+    setTimeout(() => {
+      modalDesc.innerHTML = '';
+    }, 300);
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+</script>
+
+  <footer>
+    &copy; 2025 Haru-Bayan. All rights reserved.
+  </footer>
+</body>
+</html>
